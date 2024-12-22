@@ -36,6 +36,7 @@ const RegisterController = asyncHandler(async (req, res) => {
     // Send success response
     res.status(201).json({
       message: "User registered successfully",
+      success: true,
       user: {
         username: newUser.username,
         email: newUser.email,

@@ -4,8 +4,6 @@ const {LoginController, RegisterController} = require("../controller/authControl
 
 app.route('/login').post(LoginController);
 app.route('/register').post(RegisterController);
-app.route("/testing").get((req, res) => {
-    res.send("testing");
-})
+
 
 module.exports = app
