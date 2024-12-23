@@ -73,10 +73,11 @@ const LoginController = asyncHandler(async (req, res) => {
 
   // Generate JWT token
   const token = jwt.sign(
-    { userId: user._id, userType: user.userType, username: user.username },
+    { userId: user._id, userType: user.userType, username: user.username, email: user.email },
     process.env.JWT_SECRET, // Ensure this is set in .env file
     { expiresIn: "1d" }
   );
+  
 
   // Send response with token
   res.status(200).json({

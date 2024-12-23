@@ -58,6 +58,29 @@ const userSchema = new mongoose.Schema(
     },
     resetPasswordToken: String,
     resetPasswordExpire: Date,
+    defaultEmergencyContacts: {
+      type: [
+        {
+          name: String,
+          phone: String,
+          relation: String,
+        },
+      ],
+      default: [
+        { name: "Dsw", phone: "9989122023", relation: "Authority" },
+        { name: "University Security", phone: "9701352958", relation: "Security" },
+      ], 
+    },
+    emergencyContacts: {
+      type: [
+        {
+          name: { type: String, required: true },
+          phone: { type: String, required: true, match: [/^\d{10}$/, "Phone number must be 10 digits"] },
+          relation: { type: String, required: true },
+        },
+      ],
+      default: [], 
+    },
   },
   { timestamps: true }
 );

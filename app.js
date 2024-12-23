@@ -4,6 +4,7 @@ require('express-async-errors');
 const express = require('express');
 const app = express();
 const authRoute = require("./routes/authRoute")
+const complaintRoute = require("./routes/complaintRoute")
 const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
 const connectDB = require("./db/connect")
@@ -12,6 +13,7 @@ const connectDB = require("./db/connect")
 // app.use(express.static('./public'));
 app.use(express.json());
 app.use("/api/v1/auth",authRoute)
+app.use("/api/v1/complaint",complaintRoute)
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
