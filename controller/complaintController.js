@@ -56,6 +56,32 @@ const raiseComplaintController = asyncHandler(async (req, res) => {
   }
 });
 
+// Controller to fetch complaints based on userType
+const fetchComplaintsController = asyncHandler(async (req, res) => {
+  const { userType, _id: userId, authorityType } = req.user;
+
+  try {
+    let complaints;
+
+    if (userType === 'authority' && (authorityType === "director" || authorityType === "dsw")) {
+      // Fetch all complaints for authority
+      complaints = await Complaint.find({});
+    } else if (userType === 'girlUser') {
+      // Fetch complaints raised by the specific user
+      complaints = await Complaint.find({ userId });
+    } else {
+      return res.status(403).json({ message: 'Access denied' });
+    }
+
+    res.status(200).json({ message: 'Complaints fetched successfully', complaints });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to fetch complaints', error });
+  }
+}
+);
 
 
-module.exports = raiseComplaintController;
+
+
+
+module.exports = {raiseComplaintController, fetchComplaintsController};

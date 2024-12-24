@@ -18,6 +18,7 @@ const authenticationMiddleware = async (req, res, next) => {
       username: decoded.username,
       email: decoded.email, // Attach email from the token
       userType: decoded.userType,
+      authorityType: decoded.authorityType,
     };
 
     next(); // Proceed to the next middleware
