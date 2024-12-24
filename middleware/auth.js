@@ -26,23 +26,23 @@ const authenticationMiddleware = async (req, res, next) => {
   }
 }
 
-const roleMiddleware = (requiredRoles) => (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  if (!token) {
-    return res.status(401).json({ error: "Access denied, no token provided" });
-  }
+// const roleMiddleware = (requiredRoles) => (req, res, next) => {
+//   const token = req.headers.authorization?.split(" ")[1];
+//   if (!token) {
+//     return res.status(401).json({ error: "Access denied, no token provided" });
+//   }
 
-  try {
-    const payload = jwt.verify(token, process.env.JWT_SECRET);
-    if (!requiredRoles.includes(payload.role)) {
-      return res.status(403).json({ error: "Access forbidden" });
-    }
-    req.user = payload;
-    next();
-  } catch (error) {
-    return res.status(400).json({ error: "Invalid token" });
-  }
-};
+//   try {
+//     const payload = jwt.verify(token, process.env.JWT_SECRET);
+//     if (!requiredRoles.includes(payload.role)) {
+//       return res.status(403).json({ error: "Access forbidden" });
+//     }
+//     req.user = payload;
+//     next();
+//   } catch (error) {
+//     return res.status(400).json({ error: "Invalid token" });
+//   }
+// };
 
 
-module.exports = {authenticationMiddleware, roleMiddleware}
+module.exports = {authenticationMiddleware}

@@ -31,12 +31,17 @@ const raiseComplaintController = asyncHandler(async (req, res) => {
     isAnonymous,
   };
 
+  console.log("debug test "+ isAnonymous);
+ 
+
   // Handle anonymous complaints
   if (isAnonymous) {
     complaintData.name = 'Anonymous';
   } else {
-    complaintData.name = req.user.name; // Assuming user's name is available in `req.user`
+    complaintData.name = req.user.username; // Assuming user's name is available in `req.user`
   }
+  console.log("debug test: " + req.user.username);
+  
 
   try {
     // Save the complaint in the database
