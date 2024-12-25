@@ -5,6 +5,7 @@ const express = require('express');
 const app = express();
 const authRoute = require("./routes/authRoute")
 const complaintRoute = require("./routes/complaintRoute")
+const profilesRoute = require("./routes/profilesRoute")
 const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
 const connectDB = require("./db/connect")
@@ -14,6 +15,7 @@ const connectDB = require("./db/connect")
 app.use(express.json());
 app.use("/api/v1/auth",authRoute)
 app.use("/api/v1/complaint",complaintRoute)
+app.use("/api/v1/profiles",profilesRoute)
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
