@@ -81,11 +81,11 @@ const LoginController = asyncHandler(async (req, res) => {
 
   // Send response with token
   res.status(200).json({
-    message: "Login successful",
-    token,
-    userType: user.userType, // Include userType
-  });
-  
+  message: "Login successful",
+  token,
+  userType: user.userType, // Include userType
+});
+
 });
 
 module.exports = { RegisterController, LoginController };
