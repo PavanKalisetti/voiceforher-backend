@@ -2,37 +2,40 @@ const File = require("../model/fileModel");
 
 // Controller to handle file upload
 const uploadFile = async (req, res) => {
-  try {
-    const { image, video, audio } = req.files;
-
-    const newFile = new File({
-      name: req.body.name,
-      image: image
-        ? {
-            data: image[0].buffer,
-            contentType: image[0].mimetype,
-          }
-        : undefined,
-      video: video
-        ? {
-            data: video[0].buffer,
-            contentType: video[0].mimetype,
-          }
-        : undefined,
-      audio: audio
-        ? {
-            data: audio[0].buffer,
-            contentType: audio[0].mimetype,
-          }
-        : undefined,
-    });
-
-    await newFile.save();
-    res.status(200).send("Files uploaded successfully!");
-  } catch (error) {
-    res.status(500).send("Error uploading files: " + error.message);
-  }
-};
+    try {
+      const { image, video, audio } = req.files;
+      const userId = req.user._id; // Assuming user ID is stored in req.user after authentication
+  
+      const newFile = new File({
+        name: req.body.name,
+        userId,  // Store the user ID
+        image: image
+          ? {
+              data: image[0].buffer,
+              contentType: image[0].mimetype,
+            }
+          : undefined,
+        video: video
+          ? {
+              data: video[0].buffer,
+              contentType: video[0].mimetype,
+            }
+          : undefined,
+        audio: audio
+          ? {
+              data: audio[0].buffer,
+              contentType: audio[0].mimetype,
+            }
+          : undefined,
+      });
+  
+      await newFile.save();
+      res.status(200).send("Files uploaded successfully!");
+    } catch (error) {
+      res.status(500).send("Error uploading files: " + error.message);
+    }
+  };
+  
 
 // Controller to get a file by ID and type
 const getFile = async (req, res) => {

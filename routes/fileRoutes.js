@@ -4,6 +4,7 @@ const multer = require("multer");
 const { memoryStorage } = require("multer");
 
 const { uploadFile, getFile } = require("../controller/fileController");
+const {authenticationMiddleware} = require("../middleware/auth")
 
 const router = express.Router();
 
@@ -19,7 +20,7 @@ const uploadFields = upload.fields([
 ]);
 
 // Routes for file upload and retrieval
-router.post("/upload", uploadFields, uploadFile);
+router.post("/upload", authenticationMiddleware, uploadFields, uploadFile);
 router.get("/:id/:type", getFile);
 
 module.exports = router;

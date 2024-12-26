@@ -1,5 +1,5 @@
 const { Schema, model } = require("mongoose");
-
+const mongoose = require("mongoose");
 const fileSchema = new Schema({
   name: String,
   image: {
@@ -14,8 +14,13 @@ const fileSchema = new Schema({
     data: Buffer,
     contentType: String,
   },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User", // Assuming you have a User model
+    required: true,
+  },
 });
 
 const File = model("File", fileSchema);
 
-module.exports =  File;
+module.exports = File;
