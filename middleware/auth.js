@@ -9,10 +9,12 @@ const authenticationMiddleware = async (req, res, next) => {
   }
 
   const token = authHeader.split(' ')[1]
+  // console.log(token);
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
     // Attach user details to req.user
+    console.log(decoded)
     req.user = {
       _id: decoded.userId,
       username: decoded.username,
@@ -20,6 +22,7 @@ const authenticationMiddleware = async (req, res, next) => {
       userType: decoded.userType,
       authorityType: decoded.authorityType,
     };
+
 
     next(); // Proceed to the next middleware
   } catch (error) {

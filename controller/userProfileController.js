@@ -80,28 +80,11 @@ const approveUser = asyncHandler(async (req, res) => {
 
 const updateEmergencyContacts = asyncHandler(async (req, res) => {
   const { emergencyContacts } = req.body;
-
-  // Get the token from Authorization header
-  const token = req.headers.authorization?.split(" ")[1]; // Extract token from 'Bearer <token>'
-
-  if (!token) {
-    return res.status(401).json({
-      success: false,
-      message: "Authorization token is missing.",
-    });
-  }
-
-  try {
-    // Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const userId = decoded.userId; // Extract userId from token
-
-    console.log("Debug: Received userId from token:", userId);
-    console.log("Debug: Received emergencyContacts from body:", emergencyContacts);
-
+  const userId = req.user._id;
+  
+    try {
     // Validate emergencyContacts
     if (!Array.isArray(emergencyContacts) || emergencyContacts.length === 0) {
-      console.log("Debug: Invalid emergencyContacts format.");
       return res.status(400).json({
         success: false,
         message: "Emergency contacts must be a non-empty array.",
@@ -116,7 +99,6 @@ const updateEmergencyContacts = asyncHandler(async (req, res) => {
         !contact.relation ||
         !/^\d{10}$/.test(contact.phone)
       ) {
-        console.log("Debug: Invalid contact details found:", contact);
         return res.status(400).json({
           success: false,
           message: "Each contact must have a valid name, 10-digit phone, and relation.",
@@ -132,21 +114,18 @@ const updateEmergencyContacts = asyncHandler(async (req, res) => {
     );
 
     if (!user) {
-      console.log("Debug: User not found with userId:", userId);
       return res.status(404).json({
         success: false,
         message: "User not found.",
       });
     }
 
-    console.log("Debug: Emergency contacts updated successfully for user:", user);
     res.status(200).json({
       success: true,
       message: "Emergency contacts updated successfully.",
       data: user.emergencyContacts,
     });
   } catch (error) {
-    console.error("Debug: Error during database operation:", error);
     res.status(500).json({
       success: false,
       message: "Server error while updating emergency contacts.",
@@ -155,33 +134,20 @@ const updateEmergencyContacts = asyncHandler(async (req, res) => {
 });
 
 const getEmergencyContacts = asyncHandler(async (req, res) => {
-  const { userId } = req.params; // Extract userId from request parameters
-
-  console.log("Debug: Received userId from params:", userId);
-
   try {
-    // Find the user by ID and select only the emergencyContacts field
-    const user = await User.findById(userId, 'emergencyContacts');
+    // Fetch the user profile from the database
+    const user = await User.findById(req.user._id).select('emergencyContacts'); // Exclude sensitive fields
 
     if (!user) {
-      console.log("Debug: User not found with userId:", userId);
-      return res.status(404).json({
-        success: false,
-        message: "User not found.",
-      });
+      return res.status(404).json({ message: 'User not found' });
     }
 
-    console.log("Debug: Fetched emergency contacts:", user.emergencyContacts);
     res.status(200).json({
       success: true,
-      data: user.emergencyContacts,
+      data: user,
     });
   } catch (error) {
-    console.error("Debug: Error fetching emergency contacts:", error);
-    res.status(500).json({
-      success: false,
-      message: "Server error while fetching emergency contacts.",
-    });
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 })
 
