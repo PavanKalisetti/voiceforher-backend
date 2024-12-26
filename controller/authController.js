@@ -83,7 +83,9 @@ const LoginController = asyncHandler(async (req, res) => {
   res.status(200).json({
     message: "Login successful",
     token,
+    userType: user.userType, // Include userType
   });
+  
 });
 
 module.exports = { RegisterController, LoginController };
