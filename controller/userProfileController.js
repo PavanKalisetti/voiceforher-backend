@@ -87,7 +87,7 @@ const updateEmergencyContacts = asyncHandler(async (req, res) => {
     if (!Array.isArray(emergencyContacts) || emergencyContacts.length === 0) {
       return res.status(400).json({
         success: false,
-        message: "Emergency contacts must be a non-empty array.",
+        message: "atleast one Emergency Contact needed",
       });
     }
 

@@ -80,8 +80,30 @@ const fetchComplaintsController = asyncHandler(async (req, res) => {
 }
 );
 
+const markComplaintAsSolved = asyncHandler(async (req, res) => {
+  const { complaintId } = req.params;
+
+  try {
+    const complaint = await Complaint.findById(complaintId);
+
+    if (!complaint) {
+      return res.status(404).json({ message: 'Complaint not found' });
+    }
+
+    // Update the complaint status to true
+    complaint.status = true;
+    await complaint.save();
+
+    res.status(200).json({ message: 'Complaint marked as solved', complaint });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to update complaint status', error });
+  }
+});
 
 
 
 
-module.exports = {raiseComplaintController, fetchComplaintsController};
+
+
+
+module.exports = {raiseComplaintController, fetchComplaintsController, markComplaintAsSolved};
