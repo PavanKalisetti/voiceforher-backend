@@ -6,7 +6,7 @@ const {authenticationMiddleware} = require("../middleware/auth")
 app.route('/getprofile').get(authenticationMiddleware, getUserProfile);
 app.route('/allprofiles').get(authenticationMiddleware, getAllUserProfile);
 app.route('/allprofiles/:userId').put(authenticationMiddleware, approveUser);
-app.route('/profile/emergencyContacts/:userId').put(authenticationMiddleware, updateEmergencyContacts).get(authenticationMiddleware,getEmergencyContacts);
+app.route('/profile/emergencyContacts/:userId').put(authenticationMiddleware, updateEmergencyContacts).get(getEmergencyContacts);
 
 
 
