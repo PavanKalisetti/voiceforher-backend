@@ -10,6 +10,7 @@ const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
 const connectDB = require("./db/connect")
 const fileRoutes = require('./routes/fileRoutes')
+const counsellingRoutes = require("./routes/counsellingRoutes");
 
 // middleware
 // app.use(express.static('./public'));
@@ -18,6 +19,7 @@ app.use("/api/v1/auth",authRoute)
 app.use("/api/v1/complaint",complaintRoute)
 app.use("/api/v1/profiles",profilesRoute)
 app.use("/api/v1/files", fileRoutes);
+app.use("/api/v1/counselling", counsellingRoutes);
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
