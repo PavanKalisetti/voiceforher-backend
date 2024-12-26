@@ -80,37 +80,50 @@ const approveUser = asyncHandler(async (req, res) => {
 
 const updateEmergencyContacts = asyncHandler(async (req, res) => {
   const { emergencyContacts } = req.body;
-  const userId = req.user.userId; // Get userId from the token payload (added by middleware)
 
-  console.log("Debug: Received userId from token:", userId);
-  console.log("Debug: Received emergencyContacts from body:", emergencyContacts);
+  // Get the token from Authorization header
+  const token = req.headers.authorization?.split(" ")[1]; // Extract token from 'Bearer <token>'
 
-  // Validate emergencyContacts
-  if (!Array.isArray(emergencyContacts) || emergencyContacts.length === 0) {
-    console.log("Debug: Invalid emergencyContacts format.");
-    return res.status(400).json({
+  if (!token) {
+    return res.status(401).json({
       success: false,
-      message: "Emergency contacts must be a non-empty array.",
+      message: "Authorization token is missing.",
     });
   }
 
-  // Ensure each contact has name, phone, and relation
-  for (const contact of emergencyContacts) {
-    if (
-      !contact.name ||
-      !contact.phone ||
-      !contact.relation ||
-      !/^\d{10}$/.test(contact.phone)
-    ) {
-      console.log("Debug: Invalid contact details found:", contact);
+  try {
+    // Verify token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.userId; // Extract userId from token
+
+    console.log("Debug: Received userId from token:", userId);
+    console.log("Debug: Received emergencyContacts from body:", emergencyContacts);
+
+    // Validate emergencyContacts
+    if (!Array.isArray(emergencyContacts) || emergencyContacts.length === 0) {
+      console.log("Debug: Invalid emergencyContacts format.");
       return res.status(400).json({
         success: false,
-        message: "Each contact must have a valid name, 10-digit phone, and relation.",
+        message: "Emergency contacts must be a non-empty array.",
       });
     }
-  }
 
-  try {
+    // Ensure each contact has name, phone, and relation
+    for (const contact of emergencyContacts) {
+      if (
+        !contact.name ||
+        !contact.phone ||
+        !contact.relation ||
+        !/^\d{10}$/.test(contact.phone)
+      ) {
+        console.log("Debug: Invalid contact details found:", contact);
+        return res.status(400).json({
+          success: false,
+          message: "Each contact must have a valid name, 10-digit phone, and relation.",
+        });
+      }
+    }
+
     // Find the user and update emergencyContacts
     const user = await User.findByIdAndUpdate(
       userId,
@@ -142,12 +155,12 @@ const updateEmergencyContacts = asyncHandler(async (req, res) => {
 });
 
 const getEmergencyContacts = asyncHandler(async (req, res) => {
-  const userId = req.user.userId; // Get userId from the token payload (added by middleware)
+  const { userId } = req.params; // Extract userId from request parameters
 
-  console.log("Debug: Received userId from token:", userId);
+  console.log("Debug: Received userId from params:", userId);
 
   try {
-    // Find the user and fetch only the emergencyContacts field
+    // Find the user by ID and select only the emergencyContacts field
     const user = await User.findById(userId, 'emergencyContacts');
 
     if (!user) {
@@ -170,7 +183,7 @@ const getEmergencyContacts = asyncHandler(async (req, res) => {
       message: "Server error while fetching emergency contacts.",
     });
   }
-});
+})
 
 
 
