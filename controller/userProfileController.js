@@ -79,10 +79,10 @@ const approveUser = asyncHandler(async (req, res) => {
 });
 
 const updateEmergencyContacts = asyncHandler(async (req, res) => {
-  const { userId } = req.params; // Correct parameter name
   const { emergencyContacts } = req.body;
+  const userId = req.user.userId; // Get userId from the token payload (added by middleware)
 
-  console.log("Debug: Received userId from params:", userId);
+  console.log("Debug: Received userId from token:", userId);
   console.log("Debug: Received emergencyContacts from body:", emergencyContacts);
 
   // Validate emergencyContacts
@@ -111,11 +111,11 @@ const updateEmergencyContacts = asyncHandler(async (req, res) => {
   }
 
   try {
-    console.log("Debug: Attempting to find user and update emergencyContacts...");
+    // Find the user and update emergencyContacts
     const user = await User.findByIdAndUpdate(
-      userId, // Use userId extracted from params
+      userId,
       { emergencyContacts },
-      { new: true, runValidators: true } // Return the updated document
+      { new: true, runValidators: true }
     );
 
     if (!user) {
@@ -142,12 +142,12 @@ const updateEmergencyContacts = asyncHandler(async (req, res) => {
 });
 
 const getEmergencyContacts = asyncHandler(async (req, res) => {
-  const { userId } = req.params; // Extract userId from request parameters
+  const userId = req.user.userId; // Get userId from the token payload (added by middleware)
 
-  console.log("Debug: Received userId from params:", userId);
+  console.log("Debug: Received userId from token:", userId);
 
   try {
-    // Find the user by ID and select only the emergencyContacts field
+    // Find the user and fetch only the emergencyContacts field
     const user = await User.findById(userId, 'emergencyContacts');
 
     if (!user) {
@@ -170,7 +170,7 @@ const getEmergencyContacts = asyncHandler(async (req, res) => {
       message: "Server error while fetching emergency contacts.",
     });
   }
-})
+});
 
 
 
