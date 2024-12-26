@@ -56,29 +56,25 @@ const getAllUserProfile = asyncHandler(async (req, res) => {
 );
 
 const approveUser = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+
   try {
-    const { userId } = req.params;
-
-    // Ensure the requesting user is an authority
-    if (req.user.userType !== 'authority') {
-      return res.status(403).json({ message: 'Access denied. Only authorities can approve users.' });
-    }
-
-    // Update the user's approval status
-    const user = await User.findByIdAndUpdate(userId, { isApproved: true }, { new: true });
+    // Find user by userId and update isApproved to true
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { isApproved: true},  // Update the isApproved field to true
+      { new: true }         // Return the updated document
+    );
+    // console.log(user)
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    res.status(200).json({
-      success: true,
-      message: 'User approved successfully',
-      data: user,
-    });
+    res.status(200).json({message: 'User approved successfully', data: user });
   } catch (error) {
-    console.error('Error approving user:', error);
-    res.status(500).json({ message: 'Server error', error: error.message });
+    console.error(error);
+    res.status(500).json({ message: 'Failed to approve user' });
   }
 });
 
