@@ -27,7 +27,7 @@ const RegisterController = asyncHandler(async (req, res) => {
       phoneNumber: phoneNumber || undefined, // Optional field for all users
       education: userType === "girlUser" ? education : undefined, // Only set if userType is girlUser
       authorityType: userType === "authority" ? authorityType : undefined, // Only set for authorities
-      isApproved: userType === "girlUser" ? false : true, // Default approval for girlUser as false
+      isApproved: userType === "girlUser" ? true : false, // Default approval for girlUser as true
     });
   
     // Save the user

@@ -13,7 +13,7 @@ const counsellingSchema = new mongoose.Schema({
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "users", // Assuming you have a User model to associate the girl user with the counselling request
+    ref: "users",
     required: true,
   },
 }, { timestamps: true });
