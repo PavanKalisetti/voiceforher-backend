@@ -106,6 +106,56 @@ const updateCounsellingRequestStatus = async (req, res) => {
     });
   }
 };
+const updateCounsellingDetails = async (req, res) => {
+  try {
+    const { id } = req.params; // Counselling request ID
+    const { scheduledDateTime, scheduledPlace, authorityReason, status } = req.body;
+
+    // Check if the user is an authority
+    if (req.user.userType !== "authority") {
+      return res.status(403).json({ message: "Not authorized to access this route" });
+    }
+
+    if (status === "rejected" && !authorityReason) {
+      return res.status(400).json({
+        success: false,
+        message: "A valid reason must be provided when rejecting a request.",
+      });
+    }
+
+    // Update the counselling request
+    const updatedRequest = await CounsellingRequest.findByIdAndUpdate(
+      id,
+      {
+        status,
+        scheduledDateTime,
+        scheduledPlace,
+        authorityReason: status === "rejected" ? authorityReason : null,
+      },
+      { new: true }
+    );
+
+    if (!updatedRequest) {
+      return res.status(404).json({
+        success: false,
+        message: "Counselling request not found.",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Counselling request updated successfully.",
+      data: updatedRequest,
+    });
+  } catch (error) {
+    console.error("Error while updating counselling details:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error while updating counselling details.",
+    });
+  }
+};
+
 
 const getAllCounsellingRequests = async (req, res) => {
   try {
@@ -138,4 +188,4 @@ const getAllCounsellingRequests = async (req, res) => {
 };
 
 
-module.exports = { createCounsellingRequest, getCounsellingRequests , updateCounsellingRequestStatus, getAllCounsellingRequests};
+module.exports = { createCounsellingRequest, getCounsellingRequests , updateCounsellingRequestStatus, getAllCounsellingRequests, updateCounsellingDetails};
