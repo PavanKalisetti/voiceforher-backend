@@ -14,17 +14,21 @@ const counsellingSchema = new mongoose.Schema({
     ref: "users",
     required: true,
   },
-  scheduledDateTime: {
-    type: Date,
-    default: null, // Initially undefined
+  scheduledDate: {
+    type: String, // Date as string
+    default: null,
+  },
+  scheduledTime: {
+    type: String, // Time as string
+    default: null,
   },
   scheduledPlace: {
     type: String,
-    default: null, // Initially undefined
+    default: null,
   },
   authorityReason: {
     type: String,
-    default: null, // For rejection reasons
+    default: null,
   },
 }, { timestamps: true });
 

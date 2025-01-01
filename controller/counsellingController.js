@@ -109,7 +109,7 @@ const updateCounsellingRequestStatus = async (req, res) => {
 const updateCounsellingDetails = async (req, res) => {
   try {
     const { id } = req.params; // Counselling request ID
-    const { scheduledDateTime, scheduledPlace, authorityReason, status } = req.body;
+    const { scheduledDate, scheduledTime, scheduledPlace, authorityReason, status } = req.body;
 
     // Check if the user is an authority
     if (req.user.userType !== "authority") {
@@ -128,7 +128,8 @@ const updateCounsellingDetails = async (req, res) => {
       id,
       {
         status,
-        scheduledDateTime,
+        scheduledDate,
+        scheduledTime,
         scheduledPlace,
         authorityReason: status === "rejected" ? authorityReason : null,
       },
@@ -155,6 +156,7 @@ const updateCounsellingDetails = async (req, res) => {
     });
   }
 };
+
 
 
 const getAllCounsellingRequests = async (req, res) => {
