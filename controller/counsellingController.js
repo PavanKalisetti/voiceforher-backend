@@ -71,7 +71,7 @@ const updateCounsellingRequestStatus = async (req, res) => {
     const { status } = req.body; // Extract the new status from the request body
 
     // Check if the provided status is valid
-    const validStatuses = ["pending", "in-progress", "completed"];
+    const validStatuses = ["pending", "in-progress", "completed", "rejected"];
     if (!validStatuses.includes(status)) {
       return res.status(400).json({
         success: false,
