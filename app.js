@@ -2,6 +2,7 @@ require('dotenv').config();
 require('express-async-errors');
 
 const express = require('express');
+const multer = require("multer");
 const app = express();
 const authRoute = require("./routes/authRoute")
 const complaintRoute = require("./routes/complaintRoute")
@@ -11,6 +12,13 @@ const errorHandlerMiddleware = require('./middleware/error-handler');
 const connectDB = require("./db/connect")
 const fileRoutes = require('./routes/fileRoutes')
 const counsellingRoutes = require("./routes/counsellingRoutes");
+const recognizeImage = require("./controller/ImageRecogController");
+
+// Configure multer to handle file uploads
+const upload = multer({
+  dest: 'uploads/', 
+});
+
 
 // middleware
 // app.use(express.static('./public'));
@@ -20,6 +28,7 @@ app.use("/api/v1/complaint",complaintRoute)
 app.use("/api/v1/profiles",profilesRoute)
 app.use("/api/v1/files", fileRoutes);
 app.use("/api/v1/counselling", counsellingRoutes);
+app.post('/recognize-face', upload.single('image'), recognizeImage)
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
