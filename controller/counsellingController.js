@@ -79,13 +79,14 @@ const updateCounsellingRequestStatus = async (req, res) => {
       });
     }
 
+    console.log(id)
     // Find and update the counselling request
     const updatedRequest = await CounsellingRequest.findOneAndUpdate(
-      { _id: id, user: req.user._id }, // Ensure the request belongs to the authenticated user
+      { _id: id}, // Ensure the request belongs to the authenticated user
       { status },
       { new: true } // Return the updated document
     );
-
+    console.log(updatedRequest);
     if (!updatedRequest) {
       return res.status(404).json({
         success: false,
