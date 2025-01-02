@@ -16,7 +16,7 @@ const recognizeImage = require("./controller/ImageRecogController");
 
 // Configure multer to handle file uploads
 const upload = multer({
-  dest: 'uploads/', 
+  dest: '/tmp', 
 });
 
 
