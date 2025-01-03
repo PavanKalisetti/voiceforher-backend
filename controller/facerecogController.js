@@ -35,7 +35,8 @@ const sendfacerecogDAta = async (req, res) => {
     }
   }
 
-const getFaceRecogData = async(req, res) =>{
+
+  const getFaceRecogData = async(req, res) =>{
 
     try {
         console.log("try block")

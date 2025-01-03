@@ -67,7 +67,7 @@ const fetchComplaintsController = asyncHandler(async (req, res) => {
 
     if (userType === 'authority') {
       // Fetch all complaints for authority
-      complaints = await Complaint.find({});
+      complaints = await Complaint.find({}).sort("-createdAt");;
     } else if (userType === 'girlUser') {
       // Fetch complaints raised by the specific user
       complaints = await Complaint.find({ userId });

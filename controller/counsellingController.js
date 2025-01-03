@@ -42,7 +42,7 @@ const getCounsellingRequests = async (req, res) => {
     const userId = req.user._id;  // User ID from authentication middleware
 
     // Fetch all counselling requests for the authenticated user
-    const requests = await CounsellingRequest.find({ user: userId });
+    const requests = await CounsellingRequest.find({ user: userId }).sort("-createdAt");
 
     if (requests.length === 0) {
       return res.status(404).json({
@@ -167,7 +167,7 @@ const getAllCounsellingRequests = async (req, res) => {
     }
 
     // Fetch all counselling requests for the authenticated user
-    const requests = await CounsellingRequest.find({});
+    const requests = await CounsellingRequest.find({}).sort("-createdAt");
 
     if (requests.length === 0) {
       return res.status(404).json({
