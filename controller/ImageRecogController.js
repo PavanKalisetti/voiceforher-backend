@@ -28,6 +28,7 @@ const recognizeImage = async (req, res) => {
       const result = response.data;
      // const formattedString = result.string; // String result
       const matchedFaces = result.matched_names; // Array of matched faces
+      console.log(matchedFaces);
       if(matchedFaces){
         res.status(200).json({
             message: 'Recognition successful',

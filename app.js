@@ -13,7 +13,8 @@ const connectDB = require("./db/connect")
 const fileRoutes = require('./routes/fileRoutes')
 const counsellingRoutes = require("./routes/counsellingRoutes");
 const recognizeImage = require("./controller/ImageRecogController");
-
+const {authenticationMiddleware} = require("./middleware/auth")
+const {sendfacerecogDAta, getFaceRecogData} = require("./controller/facerecogController");
 // Configure multer to handle file uploads
 const upload = multer({
   dest: '/tmp', 
@@ -29,6 +30,8 @@ app.use("/api/v1/profiles",profilesRoute)
 app.use("/api/v1/files", fileRoutes);
 app.use("/api/v1/counselling", counsellingRoutes);
 app.post('/recognize-face', upload.single('image'), recognizeImage)
+app.post('/saveMatchedFace', authenticationMiddleware, sendfacerecogDAta);
+app.get('/getrecogdata',getFaceRecogData)
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
