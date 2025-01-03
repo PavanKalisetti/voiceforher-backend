@@ -8,11 +8,11 @@ const sendfacerecogDAta = async (req, res) => {
         return res.status(400).json({ message: 'Invalid data format' });
       }
   
-      // Get user ID from the authentication middleware
+      
       const userId = req.user._id;
       const username = req.user.username;
   
-      // Process the matched faces and add userId
+      
       const updatedData = matchedFaces.map(face => ({
         branch: face.BRANCH,
         email: face.EMAIL_ADDRESS,
@@ -21,11 +21,11 @@ const sendfacerecogDAta = async (req, res) => {
         name: face.NAME,
         phoneNumber: face.PHONE_NUMBER,
         year: face.YEAR,
-        userId, // Use user ID from the auth middleware
+        userId, 
         username:username,
       }));
   
-      // Save data to the database
+      
       await FaceModel.insertMany(updatedData);
   
       res.status(201).json({ message: 'Data saved successfully', data: updatedData });
@@ -42,7 +42,7 @@ const sendfacerecogDAta = async (req, res) => {
         console.log("try block")
         const faceDataList = await FaceModel.find()
     
-        // Format each document
+        
         const formattedData = faceDataList.map((faceData) => ({
           branch: faceData.branch,
           email: faceData.email,
@@ -51,8 +51,8 @@ const sendfacerecogDAta = async (req, res) => {
           name: faceData.name,
           phoneNumber: faceData.phoneNumber,
           year: faceData.year,
-          userId: faceData.userId, // Use populated or null if not present
-          username: faceData.username // Username if available
+          userId: faceData.userId, 
+          username: faceData.username 
         }));
     
         return res.status(200).json({formattedData});

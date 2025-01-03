@@ -3,19 +3,19 @@ const mongoose = require('mongoose');
 const ComplaintSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'users', // Reference to the user raising the complaint
+    ref: 'users', 
     required: false,
   },
   name: {
     type: String,
     required: function () {
-      return !this.isAnonymous; // Name is required only if isAnonymous is false
+      return !this.isAnonymous; 
     },
-    default: 'Anonymous', // Default value when isAnonymous is true
+    default: 'Anonymous', 
   },
   email: {
     type: String,
-    required: false, // Email is optional, primarily for logged-in users
+    required: false, 
     trim: true,
   },
   subject: {
@@ -52,15 +52,15 @@ const ComplaintSchema = new mongoose.Schema({
   },
   status: {
     type: Boolean,
-    default: false, // Initial status is unresolved
+    default: false, 
   },
   isAnonymous: {
     type: Boolean,
-    default: false, // Default to not anonymous
+    default: false, 
   },
   createdAt: {
     type: Date,
-    default: Date.now, // Automatically set creation timestamp
+    default: Date.now, 
   },
 });
 

@@ -15,11 +15,11 @@ const counsellingSchema = new mongoose.Schema({
     required: true,
   },
   scheduledDate: {
-    type: String, // Date as string
+    type: String, 
     default: null,
   },
   scheduledTime: {
-    type: String, // Time as string
+    type: String, 
     default: null,
   },
   scheduledPlace: {

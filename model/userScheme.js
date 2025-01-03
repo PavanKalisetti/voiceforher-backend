@@ -104,9 +104,9 @@ userSchema.methods.getResetPasswordToken = function () {
     .createHash("sha256")
     .update(resetToken)
     .digest("hex");
-  this.resetPasswordExpire = Date.now() + 10 * 60 * 1000; // 10 minutes
+  this.resetPasswordExpire = Date.now() + 10 * 60 * 1000; 
   return resetToken;
 };
 
-// Export the schema
+
 module.exports = mongoose.model("users", userSchema);

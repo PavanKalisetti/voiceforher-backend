@@ -1,7 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const Complaint = require('../model/complaintScheme');
 
-// Controller to handle raising a complaint
+
 const raiseComplaintController = asyncHandler(async (req, res) => {
   const {
     subject,
@@ -12,17 +12,17 @@ const raiseComplaintController = asyncHandler(async (req, res) => {
     isAnonymous,
   } = req.body;
 
-  // Validate required fields
+  
   if (!subject || !description || !category || !location || !dateOfIncident) {
     return res
       .status(400)
       .json({ message: 'All fields except name are required' });
   }
 
-  // Create the complaint object
+  
   const complaintData = {
     userId: req.user._id,
-    email: req.user.email, // Use the email from the token
+    email: req.user.email, 
     subject,
     description,
     category,
@@ -34,17 +34,17 @@ const raiseComplaintController = asyncHandler(async (req, res) => {
   console.log("debug test "+ isAnonymous);
  
 
-  // Handle anonymous complaints
+  
   if (isAnonymous) {
     complaintData.name = 'Anonymous';
   } else {
-    complaintData.name = req.user.username; // Assuming user's name is available in `req.user`
+    complaintData.name = req.user.username; 
   }
   console.log("debug test: " + req.user.username);
   
 
   try {
-    // Save the complaint in the database
+    
     const newComplaint = await Complaint.create(complaintData);
 
     res.status(201).json({
@@ -56,20 +56,20 @@ const raiseComplaintController = asyncHandler(async (req, res) => {
   }
 });
 
-// Controller to fetch complaints based on userType
+
 const fetchComplaintsController = asyncHandler(async (req, res) => {
   const { userType, _id: userId, authorityType } = req.user;
 
   try {
     let complaints;
 
-    // if (userType === 'authority' && (authorityType === "director" || authorityType === "dsw"))
+    
 
     if (userType === 'authority') {
-      // Fetch all complaints for authority
+      
       complaints = await Complaint.find({}).sort("-createdAt");;
     } else if (userType === 'girlUser') {
-      // Fetch complaints raised by the specific user
+      
       complaints = await Complaint.find({ userId });
     } else {
       return res.status(403).json({ message: 'Access denied' });
@@ -92,7 +92,7 @@ const markComplaintAsSolved = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: 'Complaint not found' });
     }
 
-    // Update the complaint status to true
+    
     complaint.status = true;
     await complaint.save();
 

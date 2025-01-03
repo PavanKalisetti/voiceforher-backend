@@ -2,11 +2,11 @@ const CounsellingRequest = require("../model/counsellingModel");
 
 const createCounsellingRequest = async (req, res) => {
   try {
-    // Extract necessary details from the request body
+    
     const { reason } = req.body;
-    const userId = req.user._id;  // Assuming that user is authenticated and available via req.user
+    const userId = req.user._id;  
 
-    // Validate the inputs
+    
     if (!reason) {
       return res.status(400).json({
         success: false,
@@ -14,10 +14,10 @@ const createCounsellingRequest = async (req, res) => {
       });
     }
 
-    // Create a new counselling request
+    
     const newRequest = new CounsellingRequest({
       reason,
-      user: userId,  // Link the request to the user
+      user: userId,  
     });
 
     await newRequest.save();
@@ -36,12 +36,12 @@ const createCounsellingRequest = async (req, res) => {
   }
 };
 
-// Get all counselling requests for the authenticated user
+
 const getCounsellingRequests = async (req, res) => {
   try {
-    const userId = req.user._id;  // User ID from authentication middleware
+    const userId = req.user._id;  
 
-    // Fetch all counselling requests for the authenticated user
+    
     const requests = await CounsellingRequest.find({ user: userId }).sort("-createdAt");
 
     if (requests.length === 0) {
@@ -67,10 +67,10 @@ const getCounsellingRequests = async (req, res) => {
 
 const updateCounsellingRequestStatus = async (req, res) => {
   try {
-    const { id } = req.params; // Extract the request ID from URL params
-    const { status } = req.body; // Extract the new status from the request body
+    const { id } = req.params; 
+    const { status } = req.body; 
 
-    // Check if the provided status is valid
+    
     const validStatuses = ["pending", "in-progress", "completed", "rejected"];
     if (!validStatuses.includes(status)) {
       return res.status(400).json({
@@ -80,11 +80,11 @@ const updateCounsellingRequestStatus = async (req, res) => {
     }
 
     console.log(id)
-    // Find and update the counselling request
+    
     const updatedRequest = await CounsellingRequest.findOneAndUpdate(
-      { _id: id}, // Ensure the request belongs to the authenticated user
+      { _id: id}, 
       { status },
-      { new: true } // Return the updated document
+      { new: true } 
     );
     console.log(updatedRequest);
     if (!updatedRequest) {
@@ -109,10 +109,10 @@ const updateCounsellingRequestStatus = async (req, res) => {
 };
 const updateCounsellingDetails = async (req, res) => {
   try {
-    const { id } = req.params; // Counselling request ID
+    const { id } = req.params; 
     const { scheduledDate, scheduledTime, scheduledPlace, authorityReason, status } = req.body;
 
-    // Check if the user is an authority
+    
     if (req.user.userType !== "authority") {
       return res.status(403).json({ message: "Not authorized to access this route" });
     }
@@ -124,7 +124,7 @@ const updateCounsellingDetails = async (req, res) => {
       });
     }
 
-    // Update the counselling request
+    
     const updatedRequest = await CounsellingRequest.findByIdAndUpdate(
       id,
       {
@@ -166,7 +166,7 @@ const getAllCounsellingRequests = async (req, res) => {
       return res.status(403).json({ message: 'Not authorized to access this route' });
     }
 
-    // Fetch all counselling requests for the authenticated user
+    
     const requests = await CounsellingRequest.find({}).sort("-createdAt");
 
     if (requests.length === 0) {

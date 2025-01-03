@@ -1,14 +1,14 @@
 const File = require("../model/fileModel");
 
-// Controller to handle file upload
+
 const uploadFile = async (req, res) => {
     try {
       const { image, video, audio } = req.files;
-      const userId = req.user._id; // Assuming user ID is stored in req.user after authentication
+      const userId = req.user._id; 
   
       const newFile = new File({
         name: req.body.name,
-        userId,  // Store the user ID
+        userId,  
         image: image
           ? {
               data: image[0].buffer,
@@ -37,7 +37,7 @@ const uploadFile = async (req, res) => {
   };
   
 
-// Controller to get a file by ID and type
+
 const getFile = async (req, res) => {
   try {
     const { id, type } = req.params;

@@ -15,7 +15,7 @@ const counsellingRoutes = require("./routes/counsellingRoutes");
 const recognizeImage = require("./controller/ImageRecogController");
 const {authenticationMiddleware} = require("./middleware/auth")
 const {sendfacerecogDAta, getFaceRecogData} = require("./controller/facerecogController");
-// Configure multer to handle file uploads
+
 const upload = multer({
   dest: '/tmp', 
 });
